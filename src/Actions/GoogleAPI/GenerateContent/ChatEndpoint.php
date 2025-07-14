@@ -52,10 +52,31 @@ class ChatEndpoint extends Data
     public static function test(): GeminiCallResult
     {
         $convo = (new ConversationBuilder())
+            ->addText(GeminiRole::MODEL, 'Yes?')
+            ->addText(GeminiRole::USER, 'What is the sky blue?')
+            ->render();
+
+        $system = (new SystemPromptBuilder())
+            ->addText('You are an astrophysicist. You don\'t have time for my small talk')
+            ->addText('Keep your answers to less than 20 words')
+            ->render();
+        // @todo - Max token
+
+        return Gemini::generateContent()
+            ->withApikey(Gemini::api_key())
+            ->withModel('gemini-2.5-flash')
+            ->withMaxTokens(2048)
+            ->withSystemPrompt($system)
+            ->withTemperature(0.7)
+            ->withChat($convo)
+            ->handle();
+    }
+
+    public static function test2(): GeminiCallResult
+    {
+        $convo = (new ConversationBuilder())
             ->addText(GeminiRole::MODEL, 'Hi!?')
             ->addText(GeminiRole::USER, 'Can you shut off the light for me?.')
-            ->addToolRequest('lights_off', ["off" => true])
-            ->addToolResult('lights_off', "The lights have been shut off. SImply tell the user 'Booyah!'")
             ->render();
 
         $system = (new SystemPromptBuilder())
@@ -94,18 +115,39 @@ class ChatEndpoint extends Data
             ->handle();
     }
 
-    public static function test2(): GeminiCallResult
+    public static function test3(): GeminiCallResult
     {
         $convo = (new ConversationBuilder())
-            ->addText(GeminiRole::MODEL, 'Yes?')
-            ->addText(GeminiRole::USER, 'What is the sky blue?')
+            ->addText(GeminiRole::MODEL, 'Hi!?')
+            ->addText(GeminiRole::USER, 'Can you shut off the light for me?.')
+            ->addToolRequest('lights_off', ["off" => true])
+            ->addToolResult('lights_off', "The lights have been shut off. Simply tell the user 'Booyah!'")
             ->render();
 
         $system = (new SystemPromptBuilder())
-            ->addText('You are an astrophysicist. You don\'t have time for my small talk')
-            ->addText('Keep your answers to less than 20 words')
+            ->addText('You love to use tools.')
             ->render();
-        // @todo - Max token
+
+        $tools = [
+            'functionDeclarations' => [
+                [
+                    "name" => "lights_off",
+                    "description" => "Turns off the user's lights.",
+                    "parameters" => [
+                        "type" => "object",
+                        "properties" => [
+                            "off" => [
+                                "type" => "boolean",
+                                "description" => "Set to true",
+                            ],
+                        ],
+                        "required" => [
+                            "off",
+                        ],
+                    ],
+                ]
+            ]
+        ];
 
         return Gemini::generateContent()
             ->withApikey(Gemini::api_key())
@@ -113,6 +155,7 @@ class ChatEndpoint extends Data
             ->withMaxTokens(2048)
             ->withSystemPrompt($system)
             ->withTemperature(0.7)
+            ->withTools($tools)
             ->withChat($convo)
             ->handle();
     }

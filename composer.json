@@ -2,7 +2,7 @@
     "name": "llm-speak/google-gemini",
     "description": "A Laravel package for integrating Google Gemini into LLMSpeak",
     "type": "library",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "license": "MIT",
     "authors": [
         {

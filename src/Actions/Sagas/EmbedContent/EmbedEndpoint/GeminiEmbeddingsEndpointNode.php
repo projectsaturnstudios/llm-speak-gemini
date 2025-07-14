@@ -1,13 +1,16 @@
 <?php
 
-namespace LLMSpeak\Google\Actions\Sagas\GenerateContent\ChatEndpoint;
+namespace LLMSpeak\Google\Actions\Sagas\EmbedContent\EmbedEndpoint;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
+use LLMSpeak\Schema\Conversation\TextMessage;
+use LLMSpeak\Schema\Conversation\ToolCall;
+use LLMSpeak\Schema\Conversation\ToolResult;
 use ProjectSaturnStudios\PocketFlow\Node;
 use Symfony\Component\VarDumper\VarDumper;
-use Illuminate\Http\Client\ConnectionException;
 
-class GeminiMessagesEndpointNode extends Node
+class GeminiEmbeddingsEndpointNode extends Node
 {
     public function __construct(protected string $url)
     {
@@ -27,8 +30,9 @@ class GeminiMessagesEndpointNode extends Node
      */
     public function exec(mixed $prep_res): mixed
     {
+        VarDumper::dump(['Gemini Request - GeminiEmbeddingsEndpointNode- '.$this->url, json_encode($prep_res['body'])]);
         $response = Http::withHeaders($prep_res['headers'])->post($this->url, $prep_res['body']);
-        VarDumper::dump(["Gemini Response", $response->json()]);
+        VarDumper::dump(["Gemini Response - GeminiEmbeddingsEndpointNode", $response->json()]);
         return $response->json();
     }
 

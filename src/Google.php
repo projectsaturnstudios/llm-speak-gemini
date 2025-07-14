@@ -2,6 +2,7 @@
 
 namespace LLMSpeak\Google;
 
+use LLMSpeak\Google\Repositories\GeminiEmbedContentAPIRepository;
 use LLMSpeak\Google\Repositories\GeminiGenerateContentAPIRepository;
 
 class Google
@@ -14,6 +15,11 @@ class Google
     public function generateContent(): GeminiGenerateContentAPIRepository
     {
         return new GeminiGenerateContentAPIRepository;
+    }
+
+    public function embedContent(): GeminiEmbedContentAPIRepository
+    {
+        return new GeminiEmbedContentAPIRepository;
     }
 
     public function api_url(): string

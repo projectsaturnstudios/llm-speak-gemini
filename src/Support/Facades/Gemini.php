@@ -4,6 +4,7 @@ namespace LLMSpeak\Google\Support\Facades;
 
 use LLMSpeak\Google\Google;
 use Illuminate\Support\Facades\Facade;
+use LLMSpeak\Google\Repositories\GeminiEmbedContentAPIRepository;
 use LLMSpeak\Google\Repositories\GeminiGenerateContentAPIRepository;
 
 
@@ -11,6 +12,7 @@ use LLMSpeak\Google\Repositories\GeminiGenerateContentAPIRepository;
  * @method static string api_url()
  * @method static string api_key()
  * @method static GeminiGenerateContentAPIRepository generateContent()
+ * @method static GeminiEmbedContentAPIRepository embedContent()
  *
  * @see Google
  */
