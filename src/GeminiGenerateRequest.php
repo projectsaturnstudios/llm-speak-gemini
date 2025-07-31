@@ -78,7 +78,7 @@ class GeminiGenerateRequest extends Data
     )
     {
         $this->api_key = env('GEMINI_API_KEY');
-        $this->url = config('llms.providers.drivers.gemini.base_url', 'https://generativelanguage.googleapis.com/v1beta');
+        $this->url = config('llms.chat-providers.drivers.gemini.base_url', 'https://generativelanguage.googleapis.com/v1beta');
     }
 
     /**

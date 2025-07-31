@@ -118,6 +118,85 @@ $request = new GeminiEmbeddingsRequest(
 $response = $request->post();
 ```
 
+### Universal LLMSpeak Interface
+
+For **provider-agnostic embeddings** that work across Gemini, Mistral, Ollama, and other providers, use the universal LLMSpeak interface:
+
+```php
+use LLMSpeak\Core\Support\Facades\LLMSpeak;
+use LLMSpeak\Core\Support\Requests\LLMSpeakEmbeddingsRequest;
+
+// Universal request works with ANY provider
+$request = new LLMSpeakEmbeddingsRequest(
+    model: 'text-embedding-004',
+    input: 'Generate embeddings for this text',
+    encoding_format: null,           // Optional: 'float' or 'base64'
+    dimensions: null,                // Optional: Custom dimensions (Matryoshka)
+    task_type: 'SEMANTIC_SIMILARITY' // Optional: Gemini task optimization
+);
+
+// Execute with Gemini - same code works with other providers!
+$response = LLMSpeak::embeddingsFrom('gemini', $request);
+
+// Universal response methods
+$embeddings = $response->getAllEmbeddings();
+$firstVector = $response->getFirstEmbedding();
+$dimensions = $response->getDimensions();
+$tokenUsage = $response->getTotalTokens();
+```
+
+### Advanced Universal Features
+
+Leverage Gemini's unique capabilities through the universal interface:
+
+```php
+// Task-specific optimization
+$request = new LLMSpeakEmbeddingsRequest(
+    model: 'text-embedding-004',
+    input: 'Research paper about artificial intelligence',
+    encoding_format: 'float',
+    dimensions: 768,                    // Matryoshka representation  
+    task_type: 'RETRIEVAL_DOCUMENT'    // Gemini-specific optimization
+);
+
+$response = LLMSpeak::embeddingsFrom('gemini', $request);
+
+// Batch processing with universal interface
+$batchRequest = new LLMSpeakEmbeddingsRequest(
+    model: 'text-embedding-004', 
+    input: [
+        'Document one content',
+        'Document two content', 
+        'Document three content'
+    ],
+    encoding_format: 'float',
+    dimensions: 512,
+    task_type: 'CLUSTERING'
+);
+
+$batchResponse = LLMSpeak::embeddingsFrom('gemini', $batchRequest);
+
+echo "Generated {$batchResponse->getEmbeddingCount()} embeddings";
+echo "Vector dimensions: {$batchResponse->getDimensions()}";
+```
+
+### Why Use Universal Interface?
+
+**✅ Provider Independence:** Switch between Gemini, Mistral, Ollama with zero code changes  
+**✅ Future Proof:** New providers automatically supported  
+**✅ Consistent API:** Same methods across all providers  
+**✅ Type Safety:** Full PHP type declarations and IDE support  
+**✅ Best of Both:** Access provider-specific features when needed  
+
+```php
+// Same request works with different providers!
+$request = new LLMSpeakEmbeddingsRequest(/*...*/);
+
+$geminiResponse = LLMSpeak::embeddingsFrom('gemini', $request);   // Google AI
+$mistralResponse = LLMSpeak::embeddingsFrom('mistral', $request); // Mistral AI  
+$ollamaResponse = LLMSpeak::embeddingsFrom('ollama', $request);   // Local models
+```
+
 ### Fluent Request Building
 
 Build complex requests using the fluent interface:

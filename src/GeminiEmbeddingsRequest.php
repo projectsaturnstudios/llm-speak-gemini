@@ -58,7 +58,7 @@ class GeminiEmbeddingsRequest extends Data
     )
     {
         $this->api_key = env('GEMINI_API_KEY');
-        $baseUrl = config('llms.providers.drivers.gemini.base_url', 'https://generativelanguage.googleapis.com/v1beta');
+        $baseUrl = config('llms.embeddings-providers.drivers.gemini.base_url', 'https://generativelanguage.googleapis.com/v1beta');
         $this->url = rtrim($baseUrl, '/') . '/models/' . $this->model . ':embedContent';
     }
 
@@ -135,7 +135,7 @@ class GeminiEmbeddingsRequest extends Data
     {
         // Also need to update the URL when model changes
         $newInstance = $this->set('model', $model);
-        $baseUrl = config('llms.providers.drivers.gemini.base_url', 'https://generativelanguage.googleapis.com/v1beta');
+        $baseUrl = config('llms.embeddings-providers.drivers.gemini.base_url', 'https://generativelanguage.googleapis.com/v1beta');
         $newInstance->url = rtrim($baseUrl, '/') . '/models/' . $model . ':embedContent';
         return $newInstance;
     }
@@ -250,11 +250,11 @@ class GeminiEmbeddingsRequest extends Data
         if ($this->taskType === null) {
             return true;
         }
-        
+
         $validTaskTypes = [
             'TASK_TYPE_UNSPECIFIED',
             'RETRIEVAL_QUERY',
-            'RETRIEVAL_DOCUMENT', 
+            'RETRIEVAL_DOCUMENT',
             'SEMANTIC_SIMILARITY',
             'CLASSIFICATION',
             'CLUSTERING',
@@ -262,7 +262,7 @@ class GeminiEmbeddingsRequest extends Data
             'FACT_VERIFICATION',
             'CODE_RETRIEVAL_QUERY'
         ];
-        
+
         return in_array($this->taskType, $validTaskTypes);
     }
 
@@ -315,7 +315,7 @@ class GeminiEmbeddingsRequest extends Data
         if (!isset($this->content['parts'])) {
             return 0;
         }
-        
+
         return count(array_filter($this->content['parts'], fn($part) => isset($part['text'])));
     }
 
@@ -331,7 +331,7 @@ class GeminiEmbeddingsRequest extends Data
                 $totalLength += strlen($part['text']);
             }
         }
-        
+
         return $totalLength;
     }
 

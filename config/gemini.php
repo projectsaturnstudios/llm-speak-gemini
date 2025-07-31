@@ -2,5 +2,5 @@
 
 return [
     'base_url' => 'https://generativelanguage.googleapis.com/v1beta/',
-    'llm_speak_driver' => '',
+    'llm_speak_driver' => \LLMSpeak\Gemini\Drivers\GeminiLLMSpeakTranslationDriver::class,
 ];

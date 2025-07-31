@@ -7,7 +7,8 @@ use Illuminate\Support\ServiceProvider;
 class GoogleLLMSpeakServiceProvider extends ServiceProvider
 {
     protected array $config = [
-        'llms.providers.drivers.gemini' => __DIR__ .'/../../config/gemini.php',
+        'llms.chat-providers.drivers.gemini' => __DIR__ .'/../../config/gemini.php',
+        'llms.embeddings-providers.drivers.gemini' => __DIR__ .'/../../config/gemini-embeddings.php',
     ];
 
     public function register(): void
@@ -23,7 +24,8 @@ class GoogleLLMSpeakServiceProvider extends ServiceProvider
     protected function publishConfigs() : void
     {
         $this->publishes([
-            $this->config['llms.providers.drivers.gemini'] => config_path('llms/gemini.php'),
+            $this->config['llms.chat-providers.drivers.gemini'] => config_path('llms/chat-providers/drivers/gemini.php'),
+            $this->config['llms.embeddings-providers.drivers.gemini'] => config_path('llms/embeddings-providers/drivers/gemini.php'),
         ], ['llms', 'llms.gemini']);
     }
 
